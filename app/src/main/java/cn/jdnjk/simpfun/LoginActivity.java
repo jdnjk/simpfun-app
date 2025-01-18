@@ -28,7 +28,6 @@ import java.io.IOException;
 public class LoginActivity extends AppCompatActivity {
     EditText name, pwd;
     Button btnlogin, btnreg;
-    Mysql mysql;
     SQLiteDatabase db;
     SharedPreferences sp1, sp2;
 
@@ -46,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         btnreg = this.findViewById(R.id.reg);           // 注册按钮
 
         // 初始化 SharedPreferences
-        sp1 = this.getSharedPreferences("useinfo", this.MODE_PRIVATE);
-        sp2 = this.getSharedPreferences("username", this.MODE_PRIVATE);
+        sp2 = this.getSharedPreferences("token", this.MODE_PRIVATE);
+        sp1 = this.getSharedPreferences("username", this.MODE_PRIVATE);
 
         // 从 SharedPreferences 中加载账号和密码
         name.setText(sp1.getString("usname", ""));
