@@ -97,16 +97,16 @@ public class MainActivity extends AppCompatActivity {
         // 保存用户信息到 SharedPreferences
         SharedPreferences.Editor editor = sp3.edit();
         try {
-            editor.putInt("id", userInfo.getInt("id"));
+            editor.putInt("uid", userInfo.getInt("id"));
             editor.putString("username", userInfo.getString("username"));
             editor.putInt("point", userInfo.getInt("point"));
             editor.putInt("diamond", userInfo.getInt("diamond"));
             editor.putLong("queue_time", userInfo.getLong("queue_time"));
             editor.putBoolean("verified", userInfo.getBoolean("verified"));
-            editor.putBoolean("is_dev", userInfo.getBoolean("is_dev"));
+            editor.putBoolean("dev", userInfo.getBoolean("is_dev"));
             editor.putLong("create_time", userInfo.getLong("create_time"));
             editor.putLong("qq", userInfo.getLong("qq"));
-            editor.putBoolean("is_pro", userInfo.getBoolean("is_pro"));
+            editor.putBoolean("pro", userInfo.getBoolean("is_pro"));
             editor.putBoolean("pro_valid", userInfo.getBoolean("pro_valid"));
             editor.putString("announcement_title", userInfo.getJSONObject("announcement").getString("title"));
             editor.putString("announcement_text", userInfo.getJSONObject("announcement").getString("text"));
