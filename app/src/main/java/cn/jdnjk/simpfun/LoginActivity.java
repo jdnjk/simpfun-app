@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     // 非成功响应
                     runOnUiThread(() -> {
-                        Toast.makeText(LoginActivity.this, "请求失败！", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_LONG).show();
                         btnlogin.setEnabled(true); // 请求失败时重新启用按钮
                     });
                 }
