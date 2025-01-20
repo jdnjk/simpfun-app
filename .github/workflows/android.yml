@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # 检出代码到工作区
+        uses: actions/checkout@v4  # 检出代码到工作区
 
       - name: Set up JDK
         uses: actions/setup-java@v2
