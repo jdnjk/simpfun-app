@@ -31,6 +31,9 @@
         <activity
                 android:name=".Welcome">
         </activity>
+        <activity
+                android:name=".HomeActivity">
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

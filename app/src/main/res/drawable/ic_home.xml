@@ -1,10 +1,9 @@
-<!-- res/drawable/ic_launcher_foreground.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
         android:viewportWidth="24"
         android:viewportHeight="24">
     <path
-            android:fillColor="#ffffff"
+            android:fillColor="#000000"
             android:pathData="M12,3L2,12h3v8h14v-8h3L12,3z"/>
 </vector>
