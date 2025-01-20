@@ -1,26 +1,64 @@
-name: Android CI
+name: Android CI and Release
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - main  # 监听推送到 main 分支的事件
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - main  # 监听推送到 main 分支的 PR
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # 使用 Ubuntu 环境进行构建
 
     steps:
-    - uses: actions/checkout@v4
-    - name: set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Checkout code
+        uses: actions/checkout@v2  # 检出代码到工作区
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'  # 设置 JDK 版本（通常 Android 使用 JDK 11）
+
+      - name: Set up Android SDK
+        uses: actions/setup-android@v2  # 设置 Android SDK
+        with:
+          sdk-version: '30.0.3'  # 设置所需的 Android SDK 版本
+
+      - name: Install dependencies
+        run: |
+          ./gradlew --no-daemon dependencies  # 安装项目依赖
+
+      - name: Build APK
+        run: |
+          ./gradlew assembleRelease  # 使用 Gradle 构建 APK（可以根据需要构建 debug 版本）
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-apk
+          path: app/build/outputs/apk/release/app-release.apk  # 上传构建的 APK 文件
+
+  release:
+    runs-on: ubuntu-latest  # 使用 Ubuntu 环境执行发布
+
+    needs: build  # 确保在构建任务完成后执行发布
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1  # 创建 GitHub Release
+        with:
+          files: app/build/outputs/apk/release/app-release.apk  # 要上传的 APK 文件
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v1  # 上传构建的 APK 文件到 GitHub Release
+        with:
+          files: app/build/outputs/apk/release/app-release.apk  # 上传 APK 文件
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的自动 token 来认证
+
