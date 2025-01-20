@@ -3,7 +3,7 @@ name: Android CI and Release
 on:
   push:
     branches:
-      - master
+      - master #AI智障写的脚本果然不一般
   pull_request:
     branches:
       - master
@@ -20,6 +20,9 @@ jobs:
             java-version: '17'
             distribution: 'temurin'
             cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build APK
         run: |
