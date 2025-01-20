@@ -35,7 +35,7 @@ jobs:
           ./gradlew assembleRelease  # 使用 Gradle 构建 APK（可以根据需要构建 debug 版本）
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: app/build/outputs/apk/release/app-release.apk  # 上传构建的 APK 文件
@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Create GitHub Release
         id: create_release
