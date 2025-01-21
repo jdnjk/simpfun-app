@@ -10,8 +10,8 @@ android {
         applicationId "cn.jdnjk.simpfun"
         minSdk 25
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 10006
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
