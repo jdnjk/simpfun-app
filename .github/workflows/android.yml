@@ -28,31 +28,8 @@ jobs:
         run: |
           ./gradlew assembleRelease  # 使用 Gradle 构建 APK（可以根据需要构建 debug 版本）
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
         with:
           name: android-apk
           path: app/build/outputs/apk/release/app-release.apk  # 上传构建的 APK 文件
-
-  release:
-    runs-on: ubuntu-latest  # 使用 Ubuntu 环境执行发布
-
-    needs: build  # 确保在构建任务完成后执行发布
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v1  # 创建 GitHub Release
-        with:
-          files: app/build/outputs/apk/release/app-release.apk  # 要上传的 APK 文件
-
-      - name: Upload APK to Release
-        uses: softprops/action-gh-release@v1  # 上传构建的 APK 文件到 GitHub Release
-        with:
-          files: app/build/outputs/apk/release/app-release.apk  # 上传 APK 文件
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的自动 token 来认证
-
