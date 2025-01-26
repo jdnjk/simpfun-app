@@ -1,4 +1,4 @@
-name: Android CI and Release
+name: Android CI
 
 on:
   push:
@@ -32,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: app/build/outputs/apk/release/app-release.apk  # 上传构建的 APK 文件
+          path: app/build/outputs/apk/debug/app-debug.apk
