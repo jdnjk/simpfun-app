@@ -56,10 +56,7 @@ public class Welcome extends AppCompatActivity {
         // 设置底部导航栏监听
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             // 处理导航栏点击事件
-            if (item.getItemId() == R.id.nav_create) {
-                // 跳转到主页
-                Intent intent = new Intent(Welcome.this, CreateServer.class);
-                startActivity(intent);  // 启动 CreateServer Activity
+            if (item.getItemId() == R.id.nav_home) {
                 return true; // 处理了此事件
             } else {
                 return false; // 如果没有匹配的项，返回 false

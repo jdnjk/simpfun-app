@@ -32,7 +32,7 @@
                 android:name=".Welcome">
         </activity>
         <activity
-                android:name=".CreateServer">
+                android:name=".ServerManage">
         </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
