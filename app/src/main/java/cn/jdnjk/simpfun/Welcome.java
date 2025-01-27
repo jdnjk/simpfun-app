@@ -102,8 +102,7 @@ public class Welcome extends AppCompatActivity {
                         for (int i = 0; i < list.length(); i++) {
                             JSONObject item = list.getJSONObject(i);
                             String name = item.isNull("name") ? "未知" : item.getString("name");
-                            String details = "ID: " + item.getInt("id") + ", CPU: " + item.getString("cpu")
-                                    + ", RAM: " + item.getString("ram") + ", Disk: " + item.getString("disk");
+                            String details = "ID: " + item.getInt("id") + ", CPU核心数: " + item.getString("cpu") + ", 内存: " + item.getString("ram") + "G", 容量: " + item.getString("disk") + "GB";
                             data.add(details); // 将设备信息添加到列表中
                         }
 
