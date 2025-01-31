@@ -20,7 +20,6 @@ public class RegisterActivity extends AppCompatActivity {
         // 初始化WebView
         webView = findViewById(R.id.webview); // 这行代码需要确保布局文件中有 WebView
 
-        // 启用JavaScript
         WebSettings webSettings = webView.getSettings();
         String defaultUserAgent = webSettings.getUserAgentString();
         webSettings.setDomStorageEnabled(true);

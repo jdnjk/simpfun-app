@@ -1,14 +1,11 @@
 package cn.jdnjk.simpfun;
 
-import android.content.Intent;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import androidx.appcompat.widget.Toolbar; // 修改为正确的导入
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -22,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Welcome extends AppCompatActivity {
-    SharedPreferences sp3,sp2;
-    TextView topBarInfo;
+    SharedPreferences sp3, sp2;
+    Toolbar toolbar; // 确保使用 androidx.appcompat.widget.Toolbar
     ListView listView;
 
     @Override
@@ -34,15 +31,11 @@ public class Welcome extends AppCompatActivity {
         // 获取 SharedPreferences，用于读取保存的用户信息
         sp3 = this.getSharedPreferences("info", MODE_PRIVATE);
         sp2 = this.getSharedPreferences("token", MODE_PRIVATE);
-        topBarInfo = this.findViewById(R.id.topBarInfo);
-        String username = sp3.getString("username", "NaN");  // 获取用户名,获取不到就摆烂
-        // 获取并格式化顶栏信息
-        int points = sp3.getInt("point", 0);  // 获取积分
-        int diamonds = sp3.getInt("diamond", 0);  // 获取钻石
-        int uid = sp3.getInt("uid", 0);  // 获取 uid
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);  // 使用 androidx.appcompat.widget.Toolbar
 
-        // 设置顶栏信息
-        topBarInfo.setText("用户名: " + username + " 积分: " + points + " 钻石: " + diamonds + " uid: " + uid);
+        String username = sp3.getString("username", "NaN");  // 获取用户名
+        updateToolbarInfo();
 
         // 绑定控件
         listView = findViewById(R.id.list_view);
@@ -62,6 +55,20 @@ public class Welcome extends AppCompatActivity {
                 return false; // 如果没有匹配的项，返回 false
             }
         });
+    }
+
+    // 更新顶栏信息的方法
+    private void updateToolbarInfo() {
+        String username = sp3.getString("username", "NaN");
+        int points = sp3.getInt("point", 0);
+        int diamonds = sp3.getInt("diamond", 0);
+        int uid = sp3.getInt("uid", 0);
+
+        String title = String.format("%s | 积分: %d | 钻石: %d | UID: %d", username, points, diamonds, uid);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 
     private void fetchData() {
@@ -128,5 +135,6 @@ public class Welcome extends AppCompatActivity {
         });
     }
 }
+
 
 
