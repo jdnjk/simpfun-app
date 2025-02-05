@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        <TextView
+            android:id="@+id/commandOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:padding="8dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true" />
+    </ScrollView>
+
+<EditText
+        android:id="@+id/commandInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:hint="请输入命令"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textColorHint="#808080" />
+
+        <Button
+        android:id="@+id/simulateEnterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="模拟回车" />
+</LinearLayout>
+
+
+
+
+
