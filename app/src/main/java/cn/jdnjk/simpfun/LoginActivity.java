@@ -1,17 +1,16 @@
 package cn.jdnjk.simpfun;
 
+import android.net.Uri;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -19,16 +18,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
     EditText name, pwd;
     Button btnlogin, btnreg;
-    SQLiteDatabase db;
+    CheckBox agreeCheckbox;
     SharedPreferences sp1, sp2;
 
     // 定义 OkHttpClient
@@ -43,6 +40,31 @@ public class LoginActivity extends AppCompatActivity {
         pwd = this.findViewById(R.id.pwd);              // 密码输入框
         btnlogin = this.findViewById(R.id.login);       // 登录按钮
         btnreg = this.findViewById(R.id.reg);           // 注册按钮
+        agreeCheckbox = findViewById(R.id.agreeCheckbox);
+
+        // 设置协议文本为可点击链接
+        TextView textView = findViewById(R.id.agreeCheckbox);
+        SpannableString spannableString = new SpannableString("我同意软件许可协议和简幻欢许可协议");
+
+        // 设置 "软件许可协议" 可点击
+        ClickableSpan softwareLicenseClick = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                // 打开软件许可协议的网页
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://127.0.0.1"));
+                startActivity(intent);
+            }
+        };
+
+        // 设置 "简幻欢许可协议" 可点击
+        ClickableSpan simpfunLicenseClick = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                // 打开简幻欢许可协议的网页
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.yuque.com/simpfun/sfe/tos"));
+                startActivity(intent);
+            }
+        };
 
         // 初始化 SharedPreferences
         sp2 = this.getSharedPreferences("token", this.MODE_PRIVATE);
@@ -51,6 +73,10 @@ public class LoginActivity extends AppCompatActivity {
         // 从 SharedPreferences 中加载账号和密码
         name.setText(sp1.getString("usname", ""));
         pwd.setText(sp1.getString("uspwd", ""));
+        textView.setText(spannableString);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableString.setSpan(softwareLicenseClick, 4, 9, 0);  // "软件许可协议"
+        spannableString.setSpan(simpfunLicenseClick, 11, 17, 0);  // "简幻欢许可协议"
 
         btnlogin.setOnClickListener(new View.OnClickListener() {                // 登录事件
             @Override
@@ -62,6 +88,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "账号和密码不能为空！", Toast.LENGTH_SHORT).show();
                     return; // 直接返回，不执行后续逻辑
+                }
+                if (!agreeCheckbox.isChecked()) {
+                    Toast.makeText(LoginActivity.this, "请先同意软件许可协议和简幻欢许可协议！", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 // 禁用按钮
