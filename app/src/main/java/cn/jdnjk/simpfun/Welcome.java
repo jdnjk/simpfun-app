@@ -33,7 +33,6 @@ public class Welcome extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String username = sp3.getString("username", "NaN");
         updateToolbarInfo();
 
         // 绑定控件
@@ -59,8 +58,6 @@ public class Welcome extends AppCompatActivity {
     // 更新顶栏信息的方法
     private void updateToolbarInfo() {
         String username = sp3.getString("username", "NaN");
-        int points = sp3.getInt("point", 0);
-        int diamonds = sp3.getInt("diamond", 0);
         int uid = sp3.getInt("uid", 0);
 
         String title = String.format("%s | UID: %d", username, uid);
@@ -83,8 +80,15 @@ public class Welcome extends AppCompatActivity {
         int itemId = item.getItemId();
 
         if (itemId == R.id.action_logout) {
+            String token = sp2.getString("token", "");
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder() //完全注销登录
+                    .url("https://api.simpfun.cn/api/logout")
+                    .header("Authorization", token)
+                    .build();
             Intent intent = new Intent(Welcome.this, LoginActivity.class);
             startActivity(intent);
+            finish();
             return true;
         } else if (itemId == R.id.action_chrome) {
             Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
@@ -94,7 +98,6 @@ public class Welcome extends AppCompatActivity {
     }
 
 private void fetchData() {
-        // 获取 token 用于请求头
         String token = sp2.getString("token", "");
         if (token.isEmpty()) {
             Toast.makeText(this, "未获取到 token，无法加载数据", Toast.LENGTH_SHORT).show();

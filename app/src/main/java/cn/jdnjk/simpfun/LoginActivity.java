@@ -160,18 +160,17 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString("uspwd", password);
                                 editor.apply(); // 保存数据
 
-                                // 这里可以保存 token 或者执行其他的成功逻辑
-                                saveToken(token); // 保存 token 的方法
+                                saveToken(token);
 
                                 // 跳转到 Welcome 页面
-                                startActivity(new Intent(LoginActivity.this, Welcome.class));
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
                             } else {
                                 // 登录失败，显示返回的消息
                                 Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                             }
 
-                            // 5 秒后重新启用按钮
+                            // 解决重复
                             handler.postDelayed(() -> btnlogin.setEnabled(true), 5000);
                         });
                     } catch (JSONException e) {

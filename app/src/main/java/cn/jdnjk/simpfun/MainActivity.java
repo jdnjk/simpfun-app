@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences sp1, sp2, sp3;
+    SharedPreferences sp2, sp3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
