@@ -2,6 +2,7 @@ package cn.jdnjk.simpfun;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,7 +92,10 @@ public class Welcome extends AppCompatActivity {
             finish();
             return true;
         } else if (itemId == R.id.action_chrome) {
-            Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+            String token = sp2.getString("token", "");
+            String url = "https://simpfun.cn/auth?autologin=" + token;
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

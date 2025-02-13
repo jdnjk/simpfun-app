@@ -3,6 +3,7 @@ package cn.jdnjk.simpfun;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.*;
@@ -35,6 +36,14 @@ public class ServerManage extends AppCompatActivity {
         commandOutput = findViewById(R.id.commandOutput);
         simulateEnterButton = findViewById(R.id.simulateEnterButton);
         scrollView = findViewById(R.id.scrollView);
+
+        commandInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                simulateEnterKey();
+                return true;
+            }
+            return false;
+        });
 
         // 从 SharedPreferences 获取登录 token
         SharedPreferences sp = getSharedPreferences("token", MODE_PRIVATE);
