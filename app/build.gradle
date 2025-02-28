@@ -10,8 +10,8 @@ android {
         applicationId "cn.jdnjk.simpfun"
         minSdk 25
         targetSdk 34
-        versionCode 10006
-        versionName "1.1"
+        versionCode 1000
+        versionName "1.1.1000"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,6 @@ dependencies {
     //http
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
-    implementation 'org.nanohttpd:nanohttpd:2.3.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
