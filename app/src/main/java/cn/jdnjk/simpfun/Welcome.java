@@ -1,15 +1,20 @@
 package cn.jdnjk.simpfun;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,19 +38,10 @@ public class Welcome extends AppCompatActivity {
         sp2 = this.getSharedPreferences("token", MODE_PRIVATE);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         updateToolbarInfo();
-
-        // 绑定控件
         listView = findViewById(R.id.list_view);
-
-        // 请求数据并绑定到 ListView
         fetchData();
-
-        // 初始化底部导航栏
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-
-        // 设置底部导航栏监听
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             // 处理导航栏点击事件
             if (item.getItemId() == R.id.nav_home) {
@@ -68,37 +64,62 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
-    // 创建菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu); // 加载菜单
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
-    // 处理菜单项点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.action_logout) {
-            String token = sp2.getString("token", "");
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder() //完全注销登录
-                    .url("https://api.simpfun.cn/api/logout")
-                    .header("Authorization", token)
-                    .build();
-            Intent intent = new Intent(Welcome.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            showMenuDialog();
             return true;
-        } else if (itemId == R.id.action_chrome) {
-            String token = sp2.getString("token", "");
-            String url = "https://simpfun.cn/auth?autologin=" + token;
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showMenuDialog() {
+        String[] menuOptions = {
+                "打开浏览器",
+                "充值",
+                "注销",
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("菜单");
+        builder.setItems(menuOptions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 处理菜单选项点击事件
+                if (which == 0) {
+                    String token = sp2.getString("token", "");
+                    String url = "https://simpfun.cn/auth?autologin=" + token;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                } else if (which == 1) {
+                    Intent intent = new Intent(Welcome.this, buypoint.class);
+                    startActivity(intent);
+                } else if (which == 2) {
+                    String token = sp2.getString("token", "");
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder() //完全注销登录
+                            .url("https://api.simpfun.cn/api/logout")
+                            .header("Authorization", token)
+                            .build();
+                    Intent intent = new Intent(Welcome.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 private void fetchData() {

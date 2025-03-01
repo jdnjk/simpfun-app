@@ -54,4 +54,5 @@
     </style>
     <style name="Theme.Simpfun.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.Simpfun.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <string name="add">Add</string>
 </resources>
