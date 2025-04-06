@@ -70,6 +70,7 @@ public class ServerManage extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Authorization", authToken)
+                .header("User-Agent", "SimpfunAPP/1.1")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

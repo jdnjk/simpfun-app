@@ -16,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +130,7 @@ private void fetchData() {
         Request request = new Request.Builder()
                 .url("https://api.simpfun.cn/api/ins/list")
                 .header("Authorization", token)
+                .header("User-Agent", "SimpfunAPP/1.1")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

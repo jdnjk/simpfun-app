@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="微信支付"/>
         <RadioButton
-                android:text="支付宝支付 减免5%"
+                android:text="支付宝支付 减免0.5%"
                 android:id="@+id/radioAlipay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

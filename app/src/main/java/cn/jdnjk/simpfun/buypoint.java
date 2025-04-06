@@ -1,4 +1,3 @@
-// PaymentActivity.java
 package cn.jdnjk.simpfun;
 
 import android.app.Activity;
@@ -28,7 +27,7 @@ public class buypoint extends Activity {
     private final int[] points = {200, 600, 3300, 12000, 40000};
 
     private int selectedPoints = points[0];
-    private String selectedPaymentMethod = "WeChat"; // 默认微信支付
+    private String selectedPaymentMethod = "Alipay"; // 默认微信支付
     private String orderId = "";
 
     @Override

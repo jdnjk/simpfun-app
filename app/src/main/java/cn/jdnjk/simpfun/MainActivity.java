@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         // 设置请求头部带上 Authorization 信息
         Request request = new Request.Builder()
                 .url("https://api.simpfun.cn/api/auth/info")
-                .header("Authorization", authorizationToken)  // 使用从 SharedPreferences 获取的 token
+                .header("User-Agent", "SimpfunAPP/1.1")
+                .header("Authorization", authorizationToken)
                 .build();
 
         // 异步请求验证授权信息
