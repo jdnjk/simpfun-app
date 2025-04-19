@@ -121,13 +121,13 @@ public class MainActivity extends AppCompatActivity {
         // 跳转到登录页面
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
-        finish(); // 防止返回到 MainActivity
+        finish();
     }
 
     private void navigateToHomePage() {
         // 跳转到主页
         Intent intent = new Intent(MainActivity.this, Welcome.class);
         startActivity(intent);
-        finish(); // 防止返回到 MainActivity
+        finish();
     }
 }
