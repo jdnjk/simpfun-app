@@ -38,5 +38,10 @@
                 android:name=".buypoint">
         </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <queries>
+        <package android:name="com.eg.android.AlipayGphoneRC" /> <!-- 支付宝 -->
+    </queries>
 </manifest>
