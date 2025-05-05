@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".Welcome">
 
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -15,12 +16,18 @@
             app:titleTextColor="@color/md_theme_scrim"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <ListView
-            android:id="@+id/list_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavigation"/>
+            app:layout_constraintBottom_toTopOf="@id/bottomNavigation">
+
+        <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- 底部导航栏 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,4 +39,3 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

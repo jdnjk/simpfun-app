@@ -12,6 +12,7 @@ import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -25,6 +26,7 @@ public class Welcome extends AppCompatActivity {
     SharedPreferences sp3, sp2;
     Toolbar toolbar;
     ListView listView;
+    SwipeRefreshLayout swipeRefreshLayout; // 用于下拉刷新
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,19 @@ public class Welcome extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         updateToolbarInfo();
+
+        // 获取 SwipeRefreshLayout 和 ListView
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         listView = findViewById(R.id.list_view);
-        fetchData();
+
+        // 设置 SwipeRefreshLayout 刷新监听器
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // 刷新数据
+            fetchData();
+        });
+
+        fetchData(); // 初始化时加载数据
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             // 处理导航栏点击事件
@@ -79,7 +92,7 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
-
+    // 显示菜单对话框
     private void showMenuDialog() {
         String[] menuOptions = {
                 "打开浏览器",
@@ -104,7 +117,7 @@ public class Welcome extends AppCompatActivity {
                 } else if (which == 2) {
                     String token = sp2.getString("token", "");
                     OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder() //完全注销登录
+                    Request request = new Request.Builder() // 完全注销登录
                             .url("https://api.simpfun.cn/api/logout")
                             .header("Authorization", token)
                             .build();
@@ -119,7 +132,8 @@ public class Welcome extends AppCompatActivity {
         dialog.show();
     }
 
-private void fetchData() {
+    // 获取数据并更新 UI
+    private void fetchData() {
         String token = sp2.getString("token", "");
         if (token.isEmpty()) {
             Toast.makeText(this, "未获取到 token，无法加载数据", Toast.LENGTH_SHORT).show();
@@ -136,13 +150,19 @@ private void fetchData() {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(Welcome.this, "请求失败", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> {
+                    Toast.makeText(Welcome.this, "请求失败", Toast.LENGTH_SHORT).show();
+                    swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    runOnUiThread(() -> Toast.makeText(Welcome.this, "请求失败，状态码：" + response.code(), Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> {
+                        Toast.makeText(Welcome.this, "请求失败，状态码：" + response.code(), Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                    });
                     return;
                 }
 
@@ -161,7 +181,6 @@ private void fetchData() {
                             data.add(details);
                         }
 
-
                         runOnUiThread(() -> {
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(Welcome.this, android.R.layout.simple_list_item_1, data);
                             listView.setAdapter(adapter);
@@ -169,20 +188,27 @@ private void fetchData() {
                             // 设置列表项点击事件
                             listView.setOnItemClickListener((parent, view, position, id) -> {
                                 String result = ((TextView) view).getText().toString();
-
                                 int deviceId = Integer.parseInt(result.split(",")[0].split(":")[1].trim());
 
                                 Intent intent = new Intent(Welcome.this, ServerManage.class);
                                 intent.putExtra("device_id", deviceId);
                                 startActivity(intent);
                             });
+
+                            swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
                         });
                     } else {
-                        runOnUiThread(() -> Toast.makeText(Welcome.this, "数据加载失败", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> {
+                            Toast.makeText(Welcome.this, "数据加载失败", Toast.LENGTH_SHORT).show();
+                            swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                        });
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(Welcome.this, "解析数据失败", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> {
+                        Toast.makeText(Welcome.this, "解析数据失败", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                    });
                 }
             }
         });

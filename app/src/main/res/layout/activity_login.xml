@@ -9,10 +9,14 @@
 
     <!-- 主布局 -->
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/flatButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
         <!-- 用户名输入框 -->
         <com.google.android.material.textfield.TextInputLayout
@@ -83,5 +87,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/flatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="使用Token登录"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            style="@style/Widget.Material3.Button.TextButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
