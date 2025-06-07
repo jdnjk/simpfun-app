@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_background"
-            app:titleTextColor="@color/md_theme_scrim"
+            app:titleTextColor="@color/user"
             app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

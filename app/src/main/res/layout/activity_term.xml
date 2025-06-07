@@ -5,22 +5,102 @@
               android:orientation="vertical"
               android:padding="16dp">
 
+    <TextView
+            android:id="@+id/serverNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="加载中..."
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="left"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    <TextView
+            android:id="@+id/serverAddressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IP：加载中..."
+            android:textSize="16sp"
+            android:gravity="left"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+        <Button
+                android:id="@+id/button_start"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="开机"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/button_less_round"/>
+
+        <Button
+                android:id="@+id/button_restart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="重启"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/button_less_round"/>
+
+        <Button
+                android:id="@+id/button_shutdown"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="关机"
+                android:textSize="12sp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/button_less_round"/>
+
+        <Button
+                android:id="@+id/button_forcestop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="强关"
+                android:textSize="12sp"
+                android:background="@drawable/button_less_round"/>
+    </LinearLayout>
+
     <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/terminal_border">
+            android:background="@drawable/terminal_border"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:scrollbarSize="8dp"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbarThumbVertical="@color/md_theme_primary"
+            android:scrollbarTrackVertical="@color/scrollbar_track"
+            android:fastScrollEnabled="true"
+            android:verticalScrollbarPosition="right"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <TextView
+        <com.fox2code.androidansi.AnsiTextView
                 android:id="@+id/commandOutput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
-                android:scrollbars="vertical"
-                android:textIsSelectable="true" />
+                android:scrollbars="none"
+                android:textIsSelectable="true"
+                android:contentDescription="Terminal output" />
     </ScrollView>
 
     <LinearLayout

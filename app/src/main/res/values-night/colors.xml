@@ -1,4 +1,6 @@
 <resources>
+    <color name="scrollbar_track">#33000000</color>
+    <color name="user">#FFFFFF</color>
     <color name="md_theme_primary">#A1C9FD</color>
     <color name="md_theme_onPrimary">#003259</color>
     <color name="md_theme_primaryContainer">#1B4975</color>
