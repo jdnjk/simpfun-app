@@ -43,6 +43,13 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
 
         registerButton.setOnClickListener(v -> attemptRegister());
+
+        Button flatButton = findViewById(R.id.flatButton);
+        flatButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void attemptRegister() {
