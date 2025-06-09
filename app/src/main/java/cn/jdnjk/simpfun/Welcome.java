@@ -1,10 +1,10 @@
 package cn.jdnjk.simpfun;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,49 +26,43 @@ public class Welcome extends AppCompatActivity {
     SharedPreferences sp3, sp2;
     Toolbar toolbar;
     ListView listView;
-    SwipeRefreshLayout swipeRefreshLayout; // 用于下拉刷新
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        sp3 = this.getSharedPreferences("info", MODE_PRIVATE);
-        sp2 = this.getSharedPreferences("token", MODE_PRIVATE);
+        // 初始化 SharedPreferences
+        sp3 = getSharedPreferences("info", MODE_PRIVATE);
+        sp2 = getSharedPreferences("token", MODE_PRIVATE);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         updateToolbarInfo();
 
-        // 获取 SwipeRefreshLayout 和 ListView
+        // 初始化控件
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         listView = findViewById(R.id.list_view);
 
-        // 设置 SwipeRefreshLayout 刷新监听器
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            // 刷新数据
-            fetchData();
-        });
+        // 设置下拉刷新监听器
+        swipeRefreshLayout.setOnRefreshListener(this::fetchData);
 
-        fetchData(); // 初始化时加载数据
+        fetchData(); // 初始加载数据
 
+        // 底部导航栏点击事件（目前仅保留 home）
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            // 处理导航栏点击事件
             if (item.getItemId() == R.id.nav_home) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         });
     }
 
-    // 更新顶栏信息的方法
     private void updateToolbarInfo() {
         String username = sp3.getString("username", "NaN");
         int uid = sp3.getInt("uid", 0);
-
         String title = String.format("%s | UID: %d", username, uid);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }
@@ -92,47 +86,31 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
-    // 显示菜单对话框
     private void showMenuDialog() {
-        String[] menuOptions = {
-                "打开浏览器",
-                "充值",
-                "注销",
-        };
-
+        String[] menuOptions = {"打开浏览器", "充值", "注销"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("菜单");
-        builder.setItems(menuOptions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 处理菜单选项点击事件
-                if (which == 0) {
-                    String token = sp2.getString("token", "");
-                    String url = "https://simpfun.cn/auth?autologin=" + token;
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                } else if (which == 1) {
-                    Intent intent = new Intent(Welcome.this, buypoint.class);
-                    startActivity(intent);
-                } else if (which == 2) {
-                    String token = sp2.getString("token", "");
-                    OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder() // 完全注销登录
-                            .url("https://api.simpfun.cn/api/logout")
-                            .header("Authorization", token)
-                            .build();
-                    Intent intent = new Intent(Welcome.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+        builder.setItems(menuOptions, (dialog, which) -> {
+            if (which == 0) {
+                String token = sp2.getString("token", "");
+                String url = "https://simpfun.cn/auth?autologin=" + token;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            } else if (which == 1) {
+                Intent intent = new Intent(Welcome.this, buypoint.class);
+                startActivity(intent);
+            } else if (which == 2) {
+                SharedPreferences.Editor editor = sp2.edit();
+                editor.clear();
+                editor.apply();
+                Intent intent = new Intent(Welcome.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
-    // 获取数据并更新 UI
     private void fetchData() {
         String token = sp2.getString("token", "");
         if (token.isEmpty()) {
@@ -152,7 +130,7 @@ public class Welcome extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
                     Toast.makeText(Welcome.this, "请求失败", Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                    swipeRefreshLayout.setRefreshing(false);
                 });
             }
 
@@ -161,56 +139,46 @@ public class Welcome extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     runOnUiThread(() -> {
                         Toast.makeText(Welcome.this, "请求失败，状态码：" + response.code(), Toast.LENGTH_SHORT).show();
-                        swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                        swipeRefreshLayout.setRefreshing(false);
                     });
                     return;
                 }
 
-                // 解析 JSON 数据
                 try {
                     String jsonResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(jsonResponse);
                     int code = jsonObject.getInt("code");
+
                     if (code == 200) {
                         JSONArray list = jsonObject.getJSONArray("list");
-                        List<String> data = new ArrayList<>();
+                        List<JSONObject> serverList = new ArrayList<>();
                         for (int i = 0; i < list.length(); i++) {
-                            JSONObject item = list.getJSONObject(i);
-                            String name = item.isNull("name") ? "未知" : item.getString("name");
-                            String details = "ID: " + item.getInt("id") + ", CPU核心数: " + item.getString("cpu") + ", 内存: " + item.getString("ram") + "G" + ", 容量: " + item.getString("disk") + "GB";
-                            data.add(details);
+                            serverList.add(list.getJSONObject(i));
                         }
 
                         runOnUiThread(() -> {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(Welcome.this, android.R.layout.simple_list_item_1, data);
-                            listView.setAdapter(adapter);
-
-                            // 设置列表项点击事件
-                            listView.setOnItemClickListener((parent, view, position, id) -> {
-                                String result = ((TextView) view).getText().toString();
-                                int deviceId = Integer.parseInt(result.split(",")[0].split(":")[1].trim());
-
-                                Intent intent = new Intent(Welcome.this, ServerManage.class);
-                                intent.putExtra("device_id", deviceId);
-                                startActivity(intent);
-                            });
-
-                            swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                            updateListView(serverList);
+                            swipeRefreshLayout.setRefreshing(false);
                         });
                     } else {
                         runOnUiThread(() -> {
                             Toast.makeText(Welcome.this, "数据加载失败", Toast.LENGTH_SHORT).show();
-                            swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                            swipeRefreshLayout.setRefreshing(false);
                         });
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e("JSON_PARSE", "解析失败", e);
                     runOnUiThread(() -> {
                         Toast.makeText(Welcome.this, "解析数据失败", Toast.LENGTH_SHORT).show();
-                        swipeRefreshLayout.setRefreshing(false); // 停止刷新动画
+                        swipeRefreshLayout.setRefreshing(false);
                     });
                 }
             }
         });
+    }
+
+    private void updateListView(List<JSONObject> serverList) {
+        ServerAdapter adapter = new ServerAdapter(this, serverList);
+        listView.setAdapter(adapter);
     }
 }

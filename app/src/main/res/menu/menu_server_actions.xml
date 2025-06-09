@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/action_start"
+            android:title="开机" />
+    <item
+            android:id="@+id/action_restart"
+            android:title="重启" />
+    <item
+            android:id="@+id/action_stop"
+            android:title="关机" />
+    <item
+            android:id="@+id/action_force_stop"
+            android:title="强关" />
+</menu>
