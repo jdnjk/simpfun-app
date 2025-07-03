@@ -43,6 +43,8 @@ public class Welcome extends AppCompatActivity {
         // 初始化控件
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         listView = findViewById(R.id.list_view);
+        TextView emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
 
         // 设置下拉刷新监听器
         swipeRefreshLayout.setOnRefreshListener(this::fetchData);
@@ -79,36 +81,11 @@ public class Welcome extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add) {
-            showMenuDialog();
+            showMenuPopup();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showMenuDialog() {
-        String[] menuOptions = {"打开浏览器", "充值", "注销"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("菜单");
-        builder.setItems(menuOptions, (dialog, which) -> {
-            if (which == 0) {
-                String token = sp2.getString("token", "");
-                String url = "https://simpfun.cn/auth?autologin=" + token;
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-            } else if (which == 1) {
-                Intent intent = new Intent(Welcome.this, buypoint.class);
-                startActivity(intent);
-            } else if (which == 2) {
-                SharedPreferences.Editor editor = sp2.edit();
-                editor.clear();
-                editor.apply();
-                Intent intent = new Intent(Welcome.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-        builder.create().show();
     }
 
     private void fetchData() {
@@ -180,5 +157,40 @@ public class Welcome extends AppCompatActivity {
     private void updateListView(List<JSONObject> serverList) {
         ServerAdapter adapter = new ServerAdapter(this, serverList);
         listView.setAdapter(adapter);
+    }
+    private void showMenuPopup() {
+        PopupMenu popupMenu = new PopupMenu(this, findViewById(R.id.action_add));
+
+        popupMenu.getMenu().add(Menu.NONE, 0, 0, "打开浏览器");
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, "充值");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "注销");
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case 0: {
+                    String token = sp2.getString("token", "");
+                    String url = "https://simpfun.cn/auth?autologin=" + token;
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                    break;
+                }
+                case 1: {
+                    Intent intent = new Intent(Welcome.this, buypoint.class);
+                    startActivity(intent);
+                    break;
+                }
+                case 2: {
+                    SharedPreferences.Editor editor = sp2.edit();
+                    editor.clear();
+                    editor.apply();
+                    Intent intent = new Intent(Welcome.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+                }
+            }
+            return true;
+        });
+        popupMenu.show();
     }
 }
