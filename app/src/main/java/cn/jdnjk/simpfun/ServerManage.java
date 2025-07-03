@@ -219,7 +219,6 @@ public class ServerManage extends AppCompatActivity {
                                 android.content.ClipData clip =
                                         android.content.ClipData.newPlainText("服务器地址", ip + ":" + port);
                                 clipboard.setPrimaryClip(clip);
-                                Toast.makeText(ServerManage.this, "已复制到剪贴板", Toast.LENGTH_SHORT).show();
                             });
                         });
                     } catch (Exception e) {
