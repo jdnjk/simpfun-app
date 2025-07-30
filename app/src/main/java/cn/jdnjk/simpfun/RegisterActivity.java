@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         String username = usernameInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
         String confirmPassword = confirmPasswordInput.getText().toString().trim();
-        String inviteCode = inviteCodeInput.getText().toString().trim(); // 获取邀请码
+        String inviteCode = inviteCodeInput.getText().toString().trim();
 
         if (TextUtils.isEmpty(username)) {
             usernameInput.setError("请输入用户名");
@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         registerButton.setEnabled(false);
-        sendRegistrationRequest(username, password, inviteCode); // 传递邀请码
+        sendRegistrationRequest(username, password, inviteCode);
     }
 
     private void sendRegistrationRequest(String username, String password, String inviteCode) {
